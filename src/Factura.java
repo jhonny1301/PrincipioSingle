@@ -1,3 +1,5 @@
+import java.util.Date;
+
 public class Factura {
     public String codigo;
     public Date fechaEmision;
@@ -6,13 +8,20 @@ public class Factura {
     public float importeDeduccion;
     public float importeTotal;
     public int porcentajeDeduccion;
-    // Método que calcula el total de la factura
+
+    private CalculadoraIVA calculadoraIVA;
+    private CalculadoraDeduccion calculadoraDeduccion;
+
+    public Factura() {
+        this.calculadoraIVA = new CalculadoraIVA();
+        this.calculadoraDeduccion = new CalculadoraDeduccion();
+    }
+
     public void calcularTotal() {
-// Calculamos la deducción
-        importeDeduccion = (importeFactura * porcentajeDeduccion) / 100;
-// Calculamos el IVA
-        importeIVA = (float) (importeFactura * 0.16);
-// Calculamos el total
+        // Delegamos el cálculo de la deducción y el IVA a sus respectivas clases
+        importeDeduccion = calculadoraDeduccion.calcularDeduccion(importeFactura, porcentajeDeduccion);
+        importeIVA = calculadoraIVA.calcularIVA(importeFactura);
+        // Calculamos el total
         importeTotal = (importeFactura - importeDeduccion) + importeIVA;
     }
 }
